@@ -1,38 +1,144 @@
-.App {
+html {
+  background-color: #0d1117;
+
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body {
+  height: 95vh;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.App {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+h1 {
+  color: #e6edf3;
+  font-size: 7vh;
+}
+
+.parent {
+  width: 90%;
+  background-color: #161b22;
+  height: 75%;
+
+  margin: auto auto;
+
+  border-radius: 2vh;
+  border: 2px solid rgb(0, 0, 0);
+  box-shadow: 2vh 2vh 3vh rgb(0, 0, 0);
+
   display: flex;
-  flex-direction: column;
   align-items: center;
+}
+
+.topic-container {
+  /*background-color: rgba(16, 11, 63, 0.226);*/
+  width: 35%;
+  height: 90%;
+
+  margin-left: 4vh;
+
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+.style-1::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  background-color: #ffffff23;
+}
+
+.style-1::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+  background-color: #00000052;
+}
+
+.style-1::-webkit-scrollbar-thumb {
+  border-radius: 12px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #555;
+}
+
+input[type="text"] {
+  width: 94%;
+  height: 4.8vh;
+
+  margin-right: 1.8vh;
+  padding-top: 0.2vh;
+
+  background-color: rgba(255, 255, 255, 0.397);
+  box-shadow: none;
+  outline: none;
+  border: none;
+  font-size: 3vh;
+  padding-left: 1vh;
+}
+
+input::placeholder {
+  font-weight: normal;
+  opacity: 0.5;
+  color: rgb(0, 0, 0);
+}
+
+.div-right-side {
+  width: 65%;
+  height: 100%;
+}
+
+.selected-topics-text,
+.number-repo-text {
+  color: #e6edf3;
+}
+
+.div-bottom {
+  height: 50%;
+  margin-top: 8vh;
+
+  display: flex;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-content: center;
 }
 
-.App-link {
-  color: #61dafb;
+.get-repo-button {
+  width: 30vh;
+  height: 5vh;
+  border: 2px solid black;
+
+  background-color: #b7cceb;
+  transition: all 0.3s;
+  margin-top: 3vh;
+  box-shadow: 1vh 1vh 3vh black;
+
+  cursor: pointer;
+  font-size: 2.2vh;
+
+  user-select: none;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.get-repo-button:hover {
+  transform: scale(1.1);
+  background-color: #9bb2d3;
+  box-shadow: 0.2vh 0.2vh 2vh black;
+}
+
+.credit {
+  position: absolute;
+  right: 0;
+  color: rgba(255, 255, 255, 0.322);
+  margin-right: 2vh;
+}
+
+.link-credit {
+  color: rgba(255, 255, 255, 0.322);
+  text-decoration: none;
+}
+
+.link-credit:hover {
+  text-decoration: underline;
 }
