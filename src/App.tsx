@@ -74,7 +74,7 @@ function App() {
 
     // Appel à mon API pour avoir un repo random
     fetch(
-      AppVariables.ApiUrl + "/api/Rgr/get-random-github-repo?topic=" + topic
+      AppVariables.ApiUrl + "/api/Rgr/get-random-github-repo?topic=" + encodeURIComponent(topic)
     )
       .then((response) => response.text())
       .then((repoJson) => {
