@@ -193,8 +193,12 @@
     margin-top: -1.2vh;
     width: 11vh;
   }
+  .selected-topics-text{
+    text-align: center;
+  }
   .p-programing-language{
-    margin-right: 0vh;
+    padding-top: 1vh;
+    margin-right: 0;
     font-size: 1.5vh;
     width: 7vh;
   }

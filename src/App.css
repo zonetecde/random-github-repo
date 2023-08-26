@@ -154,7 +154,7 @@ input::placeholder {
 
   html{
     background-color: #161b22;
-
+    overflow-x: hidden;
   }
 
   h1{
