@@ -63,6 +63,7 @@
   color: rgb(184, 184, 176);
   margin-left: 0.5vh;
   user-select: none;
+  font-size: 2vh;
 }
 
 .bottom {
@@ -71,6 +72,8 @@
   background-color: rgba(24, 24, 24, 0.5);
   height: 65%;
   width: 100%;
+
+  overflow-y: auto;
 
   display: flex;
   flex-direction: column;
@@ -90,7 +93,8 @@
   display: flex;
   flex-wrap: wrap;
   margin-top: -1vh;
-  overflow-y: auto;
+
+  margin-bottom: 1vh;
 }
 
 .tag {
@@ -138,4 +142,67 @@
   display: flex;
   align-items: center;
   margin-right: 2vh;
+}
+
+/* Adaptation pour tel */
+@media (max-width: 768px) {
+
+  .tiret{
+    align-self: center;
+  }
+
+  .above{
+    flex-direction: column;
+    align-items: start;
+    margin-left: 3vh;
+    margin-top: .5vh;
+
+    justify-content: center;
+  }
+
+  .repo-parent{
+    margin-left: -11vh;
+    margin-right: -6.5vh;
+
+    max-width: 44vh;
+    
+    margin-top: -6vh;
+    white-space: nowrap;
+  }
+
+  .description{
+    white-space:normal;
+  }
+
+  .a-repoName{
+    overflow-x: none;
+    text-align: left;
+    max-width: 25vh;
+    overflow-x: auto;
+  }
+
+  .right-side{
+    flex-direction: column;
+    margin-top: -8.5vh;
+    margin-right: 5vh;
+  }
+  .repo-icon{
+    display: none;
+  }
+  .div-star{
+    margin-top: -1.2vh;
+    width: 11vh;
+  }
+  .p-programing-language{
+    margin-right: 0vh;
+    font-size: 1.5vh;
+    width: 7vh;
+  }
+  .p-star{
+    font-size: 1.5vh;
+  }
+  .star-icon{
+    height: 1.5vh;
+    width: 1.5vh;
+  }
 }

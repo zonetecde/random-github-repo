@@ -34,7 +34,6 @@ function App() {
   useEffect(() => {
     // Calcul le nbre de repo total en fonction des topics sélectionnés
     let somme = 0;
-    console.log(selectedTopics);
 
     (selectedTopics.length > 0 ? selectedTopics : topics).forEach((topic) => {
       somme += topics.find(
@@ -65,34 +64,7 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <p className="credit">
-        Created by{" "}
-        <a
-          className="link-credit"
-          target="_blank"
-          href="https://www.rayanestaszewski.fr"
-        >
-          Rayane Staszewski
-        </a>{" "}
-        -{" "}
-        <a
-          className="link-credit"
-          target="_blank"
-          href="https://www.github.com/zonetecde"
-        >
-          GitHub
-        </a>{" "}
-        -{" "}
-        <a
-          className="link-credit"
-          target="_blank"
-          href="https://www.buymeacoffee.com/zonetecde"
-        >
-          Buy me a coffee
-        </a>
-      </p>
-
+    <div className="App">   
       <h1 className="title">Random Github Repo</h1>
 
       <div className="parent">
@@ -153,8 +125,34 @@ function App() {
           <button className="get-repo-button" onMouseDown={showRandomRepo}>
             <b>Inspire me !</b>
           </button>
-        </div>
-        ;
+
+          <p className="credit">
+        Created by{" "}
+        <a
+          className="link-credit"
+          target="_blank"
+          href="https://www.rayanestaszewski.fr"
+        >
+          Rayane Staszewski
+        </a>{" "}
+        -{" "}
+        <a
+          className="link-credit"
+          target="_blank"
+          href="https://www.github.com/zonetecde"
+        >
+          GitHub
+        </a>{" "}
+        -{" "}
+        <a
+          className="link-credit"
+          target="_blank"
+          href="https://www.buymeacoffee.com/zonetecde"
+        >
+          Buy me a coffee
+        </a>
+      </p>
+        </div>       
       </div>
     </div>
   );

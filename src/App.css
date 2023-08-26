@@ -68,7 +68,7 @@ h1 {
 input[type="text"] {
   width: 94%;
   height: 4.8vh;
-
+  
   margin-right: 1.8vh;
   padding-top: 0.2vh;
 
@@ -128,10 +128,16 @@ input::placeholder {
 }
 
 .credit {
-  position: absolute;
-  right: 0;
   color: rgba(255, 255, 255, 0.322);
-  margin-right: 2vh;
+  margin-top: 3vh;
+  font-size: 1.5vh;
+}
+
+/* Adaptation des crédits */
+@media (max-height: 600px) {
+  .credit{
+    margin-top: -8vh;
+  }
 }
 
 .link-credit {
@@ -141,4 +147,51 @@ input::placeholder {
 
 .link-credit:hover {
   text-decoration: underline;
+}
+
+/* Adaptation pour tel */
+@media (max-width: 768px) {
+
+  html{
+    background-color: #161b22;
+
+  }
+
+  h1{
+    font-size: 4vh;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+  }
+
+  .topic-container{
+    overflow-x: hidden;
+    margin-left: 2vh;
+  }
+
+  .parent {
+    overflow-x:hidden;
+
+    flex-direction: column;
+    margin-left: 3.2vh;
+    height: 103vh;
+    width: 110%;
+
+    border-radius: 0;
+    border:none;
+    box-shadow: none;
+
+    margin: 0;
+  }
+  .topic-container{
+    width: 40vh;
+    margin-right: 4vh;
+    height: 40vh;
+  }
+  .div-right-side{
+    height: 20vh;
+  }
+  .get-repo-button{
+    margin-top: 17vh;
+    margin-right: 3vh;
+  }
 }

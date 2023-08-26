@@ -35,8 +35,10 @@ const GithubRepo = (props: Props) => {
           className="link"
         >
           {props.repo.Creator}
+          
+          <a className="link tiret">/</a>
+
         </a>
-        <a className="link tiret">/</a>
         <a
           href={
             "https://www.github.com/" +
@@ -45,19 +47,17 @@ const GithubRepo = (props: Props) => {
             props.repo.RepoName
           }
           target="_blank"
-          className="link"
+          className="link a-repoName"
         >
           <b>{props.repo.RepoName}</b>
         </a>
 
         <div className="right-side">
-          {props.repo.ProgramingLanguage === "" ? (
-            <></>
-          ) : (
-            <p className="p-programing-language">
+        <p className="p-programing-language"
+        style={{visibility: props.repo.ProgramingLanguage === "" ? "hidden" : "visible"}}>
               {props.repo.ProgramingLanguage}
-            </p>
-          )}
+          </p>
+           
 
           <div className="div-star">
             <svg
@@ -76,7 +76,7 @@ const GithubRepo = (props: Props) => {
         </div>
       </div>
 
-      <div className="bottom">
+      <div className="bottom style-1">
         <p
           className="description"
           dangerouslySetInnerHTML={{ __html: props.repo.Description }}

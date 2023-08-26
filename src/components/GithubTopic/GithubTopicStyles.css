@@ -54,6 +54,7 @@ img{
     text-decoration: none;
 
     margin-top: -7.5vh;
+    font-size: 1.9vh;
 }
 
 .topic-name:hover{
@@ -78,4 +79,17 @@ img{
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+}
+
+/* Adaptation pour tel */
+@media (max-width: 768px) {
+    .topic-parent{
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
+    .topic-description{
+        width: 27vh;
+        height: 5vh;
+        overflow-y: auto;
+    }
 }
