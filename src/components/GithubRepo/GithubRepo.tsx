@@ -1,4 +1,3 @@
-import React from "react";
 import Repo from "../../models/Repo";
 import "./GithubRepoStyles.css";
 
@@ -7,6 +6,10 @@ interface Props {
 }
 
 const GithubRepo = (props: Props) => {
+  // // // //
+  // Fonction permettant de convertir un nombre en
+  // une chaine de caractères avec des lettres pour
+  // remplacer les milliers et les millions
   function formatNumberWithAbbreviation(number: number): string {
     if (number >= 1000 && number < 1000000) {
       return (number / 1000).toFixed(1) + "k";
@@ -35,9 +38,8 @@ const GithubRepo = (props: Props) => {
           className="link"
         >
           {props.repo.Creator}
-          
-          <a className="link tiret">/</a>
 
+          <a className="link tiret">/</a>
         </a>
         <a
           href={
@@ -53,11 +55,16 @@ const GithubRepo = (props: Props) => {
         </a>
 
         <div className="right-side">
-        <p className="p-programing-language"
-        style={{visibility: props.repo.ProgramingLanguage === "" ? "hidden" : "visible"}}>
-              {props.repo.ProgramingLanguage}
+          <p
+            className="p-programing-language"
+            style={{
+              // Si le langage de prog n'est pas précisé alors on cache le paragraphe
+              visibility:
+                props.repo.ProgramingLanguage === "" ? "hidden" : "visible",
+            }}
+          >
+            {props.repo.ProgramingLanguage}
           </p>
-           
 
           <div className="div-star">
             <svg
@@ -79,6 +86,7 @@ const GithubRepo = (props: Props) => {
       <div className="bottom style-1">
         <p
           className="description"
+          // Certaine description contienne du code HTML
           dangerouslySetInnerHTML={{ __html: props.repo.Description }}
         ></p>
 

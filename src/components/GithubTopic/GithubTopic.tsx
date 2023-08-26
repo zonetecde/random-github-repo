@@ -3,22 +3,29 @@ import Topic from "../../models/Topic";
 import "./GithubTopicStyles.css";
 
 interface Props {
+  // Le topic que contient ce component
   Topic: Topic;
+  // Méthode à appeler si le topic de ce component est sélectionné 
   setSelectedTopics: React.Dispatch<React.SetStateAction<string[]>>;
+  // Les topics sélectionnés par l'utilisateur
   selectedTopics: string[];
 }
 
 const GithubTopic = (props: Props) => {
+
+  // // 
+  // Ce topic s'est fait sélectionner
   function topicSelected() {
     var updatedSelectedTopics: string[] = [];
 
-    // si c'est déjà le topic sélectionner alors on l'enlève
+    // S'il était déjà dans la liste des topics sélectionnés alors on l'enlève
     if (props.selectedTopics.includes(props.Topic.Name)) {
       updatedSelectedTopics = props.selectedTopics.filter(
         (topic) => topic !== props.Topic.Name
       );
       props.setSelectedTopics(updatedSelectedTopics);
     } else {
+      // Sinon on l'ajoute parmis les topics sélectionnés
       updatedSelectedTopics = [...props.selectedTopics, props.Topic.Name];
       props.setSelectedTopics(updatedSelectedTopics);
     }
@@ -29,7 +36,7 @@ const GithubTopic = (props: Props) => {
       <div
         className="topic-parent"
         onMouseDown={topicSelected}
-        // effet sélectionner
+        // Effet de "topic sélectionné"
         style={{
           backgroundColor: props.selectedTopics.includes(props.Topic.Name)
             ? "#2A3B4F"
