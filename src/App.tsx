@@ -8,6 +8,9 @@ import GithubTopic from "./components/GithubTopic/GithubTopic";
 import Repo from "./models/Repo";
 import GithubRepo from "./components/GithubRepo/GithubRepo";
 
+import LoadingWheel from "./icons/loading.gif";
+import SettingsIcon from "./icons/setting.png";
+
 function App() {
   // Contient tout les topics github
   const [topics, setTopics] = useState<Topic[]>([]);
@@ -19,10 +22,15 @@ function App() {
   const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
 
   // Contient le nombre de repo total (une somme est faite des repos dans `selectedTopics`)
-  const [numberOfRepo, setNumberOfRepo] = useState<number>(0);
+  const [numberOfRepo, setNumberOfRepo] = useState<number>(-1);
 
   // Contient le repo actuellement affiché à l'écran
   const [repo, setRepo] = useState<Repo>(new Repo());
+
+  // Contient le filtre du min et max de star
+  const [starFilter, setStarFilter] = useState<[number, number]>([
+    0, 1_000_000,
+  ]);
 
   // Fonction qui s'execute après l'initialisaiton de la page
   useMemo(() => {
@@ -43,38 +51,55 @@ function App() {
     setSelectedTopics([]);
   }, [topics]);
 
+  // Hook: Le filtre des stars a été modifié
+  useEffect(() => {
+    // On affiche le nbre de repo total en appelant le hook des selectedTopics
+    setSelectedTopics([]);
+  }, [starFilter]);
+
   // Hook: Des topics ont été sélectionnés
   useEffect(() => {
-    // Calcul le nbre de repo total qui se trouve dans tout les topics sélectionnés
-    let somme = 0;
+    // Get le nbre de repo total qui se trouve dans tout les topics sélectionnés
+    // Le temps de faire l'appel API on le met à -1
+    setNumberOfRepo(-1);
 
-    // Si aucun topic n'est sélectionné on compte les repos de tout les topics,
-    // sinon on compte que ceux sélectionnés
-    (selectedTopics.length > 0 ? selectedTopics : topics).forEach((topic) => {
-      somme += (typeof topic === "string" ? topics.find(
-        (x) => x.Name ===  topic)!.NumberOfRepo : topic.NumberOfRepo) 
-    });
-
-    setNumberOfRepo(somme);
+    fetch(
+      AppVariables.ApiUrl +
+        "/api/Rgr/repo-counter?topics=" +
+        encodeURIComponent(selectedTopics.toString()) +
+        "&minStar=" + starFilter[0] + "&maxStar=" + starFilter[1]
+    )
+      .then((response) => response.text())
+      .then((number) => {
+        setNumberOfRepo(Number(number));
+      });
   }, [selectedTopics]);
 
-  // Ref à l'input de la recher pour savoir son contenue 
+  // Ref à l'input de la recher pour savoir son contenue
   let searchInputRef: React.RefObject<HTMLInputElement> = React.createRef();
+
+  // Ref aux inputs des filtres
+  let minStarInputRef: React.RefObject<HTMLInputElement> = React.createRef();
+  let maxStarInputRef: React.RefObject<HTMLInputElement> = React.createRef();
 
   // // //
   // Affiche un repo random
   function showRandomRepo() {
-    var topic: string = "";
+    var topics: string = "";
 
-    // Si l'utilisateur a spécifié des topics, on les prends en compte
-    if (selectedTopics.length > 0) {
+    // Si l'utilisateur a spécifié des topics, on les prends en compte sauf
+    // s'il n'y a aucun repo trouvé pour ces topics
+    if (selectedTopics.length > 0 && numberOfRepo >= 1) {
       // Choisi un topic random parmis ceux sélectionnés
-      topic = selectedTopics[Math.floor(Math.random() * selectedTopics.length)];
+      topics = selectedTopics.toString();
     }
 
     // Appel à mon API pour avoir un repo random
     fetch(
-      AppVariables.ApiUrl + "/api/Rgr/get-random-github-repo?topic=" + encodeURIComponent(topic)
+      AppVariables.ApiUrl +
+        "/api/Rgr/get-random-github-repo?topics=" +
+        encodeURIComponent(topics) +
+        "&minStar=" + starFilter[0] + "&maxStar=" + starFilter[1]
     )
       .then((response) => response.text())
       .then((repoJson) => {
@@ -82,40 +107,85 @@ function App() {
       });
   }
 
+  // Met à jour le filtre, mais attend d'abord
+  // 2 secondes pour être sûrs que rien n'est touché
+  let timer: NodeJS.Timeout | undefined; 
+  function starFilterChanged() {
+    if (timer) {
+      clearTimeout(timer);
+    }
+
+    timer = setTimeout(() => {
+      // Modifie le filtre des étoiles
+      setStarFilter([Number(minStarInputRef.current!.value === "" ? 0 : minStarInputRef.current!.value), Number(maxStarInputRef.current!.value === "" ? 1_000_000 : maxStarInputRef.current!.value)])
+    }, 1250); 
+  }
+
   return (
-    <div className="App">   
+    <div className="App">
       <h1 className="title">Random Github Repo</h1>
 
       <div className="parent">
-        <div className="topic-container style-1">
+        <div className="div-left-side topic-container">
           <input
+            className="search-input"
             ref={searchInputRef}
             type="text"
-            onKeyUp={() => {
+            onChange={() => {
               setSearchTerm(searchInputRef.current!.value);
             }}
             placeholder="Search a topic"
           />
 
-          {topics.map((topic: Topic) => {
-            return (
-              // Affiche uniquement le topic si ce dernier se trouve dans la recherche 
-              // OU si il n'y a pas de recherche
-              topic.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                searchTerm === "" ? (
-                <GithubTopic
-                  selectedTopics={selectedTopics}
-                  key={topic.Id}
-                  Topic={topic}
-                  setSelectedTopics={setSelectedTopics}
-                ></GithubTopic>
-              ) : (
-                <></>
-              )
-            );
-          })}
+          <div className="topic-container style-1">
+            {topics.map((topic: Topic) => {
+              return (
+                // Affiche uniquement le topic si ce dernier se trouve dans la recherche
+                // OU si il n'y a pas de recherche
+                topic.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                  searchTerm === "" ? (
+                  <GithubTopic
+                    selectedTopics={selectedTopics}
+                    key={topic.Id}
+                    Topic={topic}
+                    setSelectedTopics={setSelectedTopics}
+                  ></GithubTopic>
+                ) : (
+                  <></>
+                )
+              );
+            })}
+          </div>
+
+          <div className="div-star-filter">
+            <form className="form-star">
+              <p className="p-star-filter">Minimum star : <input
+                className="star-input"
+                min="0"
+                max="1000000"
+                type="number"
+                onChange={starFilterChanged}
+                ref={minStarInputRef}
+                defaultValue="0"
+              /></p>
+              
+              <p className="p-star-filter">Maximum star : <input
+                className="star-input"
+                min="0"
+                max="1000000"
+                type="number"
+                onChange={starFilterChanged}
+                ref={maxStarInputRef}
+                defaultValue="1000000"
+              /></p>
+              
+            </form>
+          </div>
         </div>
-        <div className="div-right-side">
+
+        <div className="div-right-side style-1">
+          {/*<img className="settings-icon" src={SettingsIcon} />*/}
+
           {selectedTopics.length > 0 ? (
             <>
               <h2 className="selected-topics-text">
@@ -123,7 +193,7 @@ function App() {
                 Selected topic{selectedTopics.length > 1 ? "s" : ""} :{" "}
                 {selectedTopics.map((topic, index) => {
                   return (
-                    <span>
+                    <span key={index}>
                       {topic}
                       {/* On omet la virgule si c'est le dernier topic à afficher */}
                       {index === selectedTopics.length - 1 ? "" : ", "}
@@ -137,12 +207,17 @@ function App() {
           )}
 
           <h3 className="number-repo-text">
-            Number of repositories : {numberOfRepo.toLocaleString()}
+            Number of repositories :{" "}
+            {numberOfRepo !== -1 ? (
+              <span style={{ color: numberOfRepo === 0 ? "red" : "green" }}>
+                {numberOfRepo.toLocaleString()}
+              </span>
+            ) : (
+              <img className="loading-wheel" src={LoadingWheel} />
+            )}
           </h3>
 
-          <div className="div-bottom">
-            {<GithubRepo repo={repo} />}
-          </div>
+          <div className="div-bottom">{<GithubRepo repo={repo} />}</div>
 
           <button className="get-repo-button" onMouseDown={showRandomRepo}>
             <b>Inspire me !</b>
@@ -175,7 +250,7 @@ function App() {
               Buy me a coffee
             </a>
           </p>
-        </div>       
+        </div>
       </div>
     </div>
   );

@@ -71,6 +71,9 @@ img{
     font-size: 1.8vh;
 
     user-select: none;
+
+    height: 5vh;
+    overflow-y: auto;
 }
 
 .div-topic-information{
@@ -82,7 +85,7 @@ img{
 }
 
 /* Adaptation pour tel */
-@media (max-width: 768px) {
+@media (max-width: 781px) {
     .topic-parent{
         overflow-x: hidden;
         overflow-y: hidden;

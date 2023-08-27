@@ -39,6 +39,7 @@
   margin-left: 0.5vh;
   margin-right: 0.5vh;
   color: #949494;
+  display: inline;
 }
 
 .div-star {
@@ -145,7 +146,7 @@
 }
 
 /* Adaptation pour tel */
-@media (max-width: 768px) {
+@media (max-width: 781px) {
 
   .tiret{
     align-self: center;

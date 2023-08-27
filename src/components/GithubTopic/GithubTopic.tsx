@@ -53,7 +53,7 @@ const GithubTopic = (props: Props) => {
           <a className="topic-name" href={props.Topic.Url} target="_blank">
             {props.Topic.Name}
           </a>
-          <p className="topic-description">{props.Topic.Description}</p>
+          <p className="topic-description style-1">{props.Topic.Description}</p>
         </div>
       </div>
 

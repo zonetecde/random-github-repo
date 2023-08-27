@@ -39,7 +39,7 @@ const GithubRepo = (props: Props) => {
         >
           {props.repo.Creator}
 
-          <a className="link tiret">/</a>
+          <p className="link tiret">/</p>
         </a>
         <a
           href={
@@ -94,6 +94,7 @@ const GithubRepo = (props: Props) => {
           {props.repo.Tags.map((tag) => {
             return tag !== "" ? (
               <div
+                key={tag}
                 onMouseDown={() => {
                   window.open("https://www.github.com/topics/" + tag, "_blank");
                 }}
