@@ -54,11 +54,15 @@ function App() {
   // Hook: Le filtre des stars a été modifié
   useEffect(() => {
     // On affiche le nbre de repo total en appelant le hook des selectedTopics
-    setSelectedTopics([]);
+    updateRepoCount();
   }, [starFilter]);
 
   // Hook: Des topics ont été sélectionnés
   useEffect(() => {
+    updateRepoCount();
+  }, [selectedTopics]);
+
+  function updateRepoCount(){
     // Get le nbre de repo total qui se trouve dans tout les topics sélectionnés
     // Le temps de faire l'appel API on le met à -1
     setNumberOfRepo(-1);
@@ -73,7 +77,7 @@ function App() {
       .then((number) => {
         setNumberOfRepo(Number(number));
       });
-  }, [selectedTopics]);
+  }
 
   // Ref à l'input de la recher pour savoir son contenue
   let searchInputRef: React.RefObject<HTMLInputElement> = React.createRef();
