@@ -12,6 +12,10 @@ import LoadingWheel from "./icons/loading.gif";
 import SettingsIcon from "./icons/setting.png";
 import RemoveIcon from "./icons/remove.png";
 
+import remarkGfm from 'remark-gfm'
+import ReactMarkdown from 'react-markdown'
+import rehypeRaw from "rehype-raw";
+
 function App() {
   // Contient tout les topics github
   const [topics, setTopics] = useState<Topic[]>([]);
@@ -27,6 +31,9 @@ function App() {
 
   // Contient le repo actuellement affiché à l'écran
   const [repo, setRepo] = useState<Repo>(new Repo());
+
+  // Contient le code markdown du repo en cours
+  const [markdownContent, setMarkdownContent] = useState<string| null>(null);
 
   // Contient le filtre du min et max de star
   const [starFilter, setStarFilter] = useState<[number, number]>([
@@ -89,9 +96,9 @@ function App() {
 
   const handleKeyDown = (event: KeyboardEvent) => {
     // Handle the keydown event here
-    if(event.key === " " && document.activeElement?.className !== "search-input")
+    if(event.key === " " && document.activeElement?.className !== "search-input"
+        && markdownContent === null)
     {
-      console.log(repo);
        showRandomRepo();
     }
   };
@@ -102,7 +109,7 @@ function App() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [repo]);
+  }, [repo,markdownContent]);
 
 
   // // //
@@ -130,7 +137,12 @@ function App() {
     )
       .then((response) => response.text())
       .then((repoJson) => {
-        setRepo(Repo.fromJSON(repoJson));
+        let _repo = Repo.fromJSON(repoJson);
+        setRepo(_repo);
+
+        // si la page markdown est déjà ouverte alors on simule son ouverture
+        if(markdownContent !== null)
+          showReadme(_repo.Creator + "/"+_repo.RepoName);
       });
   }
 
@@ -148,9 +160,36 @@ function App() {
     }, 1250); 
   }
 
+  // Affiche le read.me
+  // repo au format : createur/nom_du_repo
+  function showReadme(repo:string) {
+    setMarkdownContent("Loading markdown...")
+
+    fetch(
+      "https://raw.githubusercontent.com/" + repo + "/master/README.md"
+    )
+      .then((response) => response.text())
+      .then((markdown) => {
+        if(markdown === "404: Not Found")
+          setMarkdownContent("No README.md found");
+        else
+        {
+          // remplace toutes les urls d'img relatif en url complète vers l'img dans le repo 
+          // src="/
+          const updatedMarkdown = markdown.replace(
+            /!\[([^\]]+)\]\((\/[^)]+\.(png|jpg|jpeg|gif))\)/g,
+            `![\$1](https://raw.githubusercontent.com/${repo + "/master/"}\$2)`
+          );
+
+          setMarkdownContent(updatedMarkdown);
+        }
+      })
+  }
+  
+
   return (
     <div className="App">
-      <h1 className="title">Random Github Repo</h1>
+      <h1 className="title">{markdownContent === null ? "Random Github Repo" : "README.md"}</h1>
 
       <div className="parent">
         <div className="div-left-side topic-container">
@@ -247,7 +286,7 @@ function App() {
             )}
           </h3>
 
-          <div className="div-bottom">{<GithubRepo repo={repo} />}</div>
+          <div className="div-bottom">{<GithubRepo showReadme={showReadme} repo={repo} />}</div>
 
           <button className="get-repo-button" onMouseDown={showRandomRepo}>
             <b>Inspire me !</b>
@@ -280,6 +319,18 @@ function App() {
               Buy me a coffee
             </a>
           </p>
+        </div>
+
+        <div className="markdown-shower" onMouseDown={(e)=> {
+          if((e.target as HTMLInputElement).className === "markdown-shower")
+            setMarkdownContent(null);
+         
+        }} style={{transform: markdownContent === null ? "scale(0)" : "scale(1)"}}>
+          <div className="markdown-page style-1">
+            <img src={RemoveIcon} className="remove-icon-md" onMouseDown={()=>setMarkdownContent(null)}/>
+            {/*@ts-expect-error*/}
+            <ReactMarkdown rehypePlugins={[rehypeRaw]} remarkPlugins={[remarkGfm]} children={markdownContent ?? ""} />
+          </div>
         </div>
       </div>
     </div>

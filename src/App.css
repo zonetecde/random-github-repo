@@ -28,7 +28,6 @@ h1 {
 
   margin: auto auto;
 
-  border-radius: 2vh;
   border: 2px solid rgb(0, 0, 0);
   box-shadow: 2vh 2vh 3vh rgb(0, 0, 0);
 
@@ -234,6 +233,67 @@ input[type=number]::-webkit-outer-spin-button {
 
 }
 
+.loading-wheel{
+  width: 2vh;
+  height: 2vh;
+}
+
+.settings-icon{
+  position: absolute;
+  right: 12vh;
+  margin-top: 2vh;
+
+  width: 4vh;
+  height: 4vh;
+}
+
+.markdown-shower{
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 90%;
+  height: 75%;
+  transition-duration: .5s;
+}
+
+.markdown-page{
+  margin: 0 auto;
+  padding-left: 5vh;
+  padding-right: 5vh;
+
+  word-wrap: normal;
+  overflow-x: auto;
+
+  text-align: left;
+  width: 70%;
+  height: 100%;
+  overflow-y: auto;
+  background-color: #0D1117 ;
+  color: #e6edf3;
+}
+
+
+
+.remove-icon-md{
+  width: 4vh  !important;
+  height: 4vh  !important; 
+  float: right;
+  margin-right: -4vh;
+  margin-top: 1vh;
+
+  cursor: pointer;
+}
+
+/*markdown*/
+table {
+  border-collapse: collapse;
+  
+}
+th, td {
+  padding: 5px;
+  border: 1px solid rgb(253, 251, 251);
+}
+
+
 /* Adaptation pour tel */
 @media (max-width: 781px) {
 
@@ -289,6 +349,13 @@ input[type=number]::-webkit-outer-spin-button {
   .div-left-side{
     overflow-y: hidden;
   }
+  .markdown-shower{
+    height: 100%;
+    background-color: rgb(0, 0, 0);
+  }
+  .markdown-page{
+    overflow-x: auto;
+  }
 }
 
 @media(max-width:1336px){
@@ -309,18 +376,4 @@ input[type=number]::-webkit-outer-spin-button {
   .p-star-filter{
     margin-bottom: -.8vh;
   }
-}
-
-.loading-wheel{
-  width: 2vh;
-  height: 2vh;
-}
-
-.settings-icon{
-  position: absolute;
-  right: 12vh;
-  margin-top: 2vh;
-
-  width: 4vh;
-  height: 4vh;
 }

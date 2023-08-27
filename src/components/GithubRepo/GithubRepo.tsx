@@ -1,8 +1,11 @@
 import Repo from "../../models/Repo";
 import "./GithubRepoStyles.css";
 
+import LoadingIcon from '../../icons/loading.gif'
+
 interface Props {
   repo: Repo;
+  showReadme(repo: string): void
 }
 
 const GithubRepo = (props: Props) => {
@@ -22,6 +25,9 @@ const GithubRepo = (props: Props) => {
 
   return (
     <div className="repo-parent" style={{transform: props.repo.Id === -1 ? "scale(0.9)" : "scale(1)"}}>
+      
+      {props.repo.Id === -1 ? <div className="loading-div"><img src={LoadingIcon} className="loading-icon"/></div> : <></>}
+      
       <div className="above">
         <svg
           height="2.7vh"
@@ -108,6 +114,8 @@ const GithubRepo = (props: Props) => {
           })}
         </div>
       </div>
+
+      <button className="show-readme-p" onMouseDown={()=>props.showReadme(props.repo.Creator + "/" +props.repo.RepoName)}>README.me</button>
     </div>
   );
 };

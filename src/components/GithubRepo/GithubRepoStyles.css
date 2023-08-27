@@ -3,7 +3,7 @@
   width: 90vh;
   height: 30vh;
 
-  border-radius: 8px;
+  border-radius: 8px 8px 0 8px;
   border: 1px solid rgb(66, 62, 62);
 
   display: flex;
@@ -11,8 +11,6 @@
 
   transition-duration: .5s;
 }
-
-
 
 .above {
   height: 35%;
@@ -214,4 +212,50 @@
     height: 1.5vh;
     width: 1.5vh;
   }
+  .show-readme-p{
+    margin-right: 1vh;
+  }
+}
+
+.loading-icon{
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 11.5vh;
+  width: 6vh;
+  height: 6vh;
+}
+
+.loading-div{
+  background-color: rgba(0, 0, 0, 0.6);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 1vh;
+}
+
+.show-readme-p{
+  width: 12vh;
+  height: 3vh;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+
+  border: 3px solid rgb(50, 50, 63);
+  border-bottom: none;
+  border-right: none;
+  border-radius: 1vh 0 0 0;
+  background-color: #161b22;
+  color: #e6edf3;
+
+  cursor: pointer;
+  transition-duration: .3s;
+}
+
+.show-readme-p:hover{
+  transform: scale(1.1);
+  right: 0.7vh;
+  bottom: 0.2vh;
 }
