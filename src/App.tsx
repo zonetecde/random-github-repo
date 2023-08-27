@@ -87,6 +87,24 @@ function App() {
   let minStarInputRef: React.RefObject<HTMLInputElement> = React.createRef();
   let maxStarInputRef: React.RefObject<HTMLInputElement> = React.createRef();
 
+  const handleKeyDown = (event: KeyboardEvent) => {
+    // Handle the keydown event here
+    if(event.key === " " && document.activeElement?.className !== "search-input")
+    {
+      console.log(repo);
+       showRandomRepo();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [repo]);
+
+
   // // //
   // Affiche un repo random
   function showRandomRepo() {
@@ -98,6 +116,10 @@ function App() {
       // Choisi un topic random parmis ceux sélectionnés
       topics = selectedTopics.toString();
     }
+
+    // animation (le component va voir que .Id = -1)
+    let updatedRepo = { ...repo, Id: -1 };
+    setRepo(updatedRepo);
 
     // Appel à mon API pour avoir un repo random
     fetch(

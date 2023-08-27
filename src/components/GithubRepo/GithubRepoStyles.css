@@ -8,7 +8,11 @@
 
   display: flex;
   flex-direction: column;
+
+  transition-duration: .5s;
 }
+
+
 
 .above {
   height: 35%;

@@ -21,7 +21,7 @@ const GithubRepo = (props: Props) => {
   }
 
   return (
-    <div className="repo-parent">
+    <div className="repo-parent" style={{transform: props.repo.Id === -1 ? "scale(0.9)" : "scale(1)"}}>
       <div className="above">
         <svg
           height="2.7vh"
