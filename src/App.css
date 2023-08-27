@@ -216,6 +216,24 @@ input[type=number]::-webkit-outer-spin-button {
   overflow-x: hidden;
 }
 
+.icon-delete-topic{
+  width: 1.5vh;
+  height: 1.5vh;
+  margin-bottom: 1.25vh;
+  margin-left: 0.3vh;
+  display: none;
+}
+
+/*Affiche l'icon delete*/
+.topic-text:hover .icon-delete-topic {
+  display: inline-block;
+}
+
+.topic-text:hover{
+  cursor: pointer;
+
+}
+
 /* Adaptation pour tel */
 @media (max-width: 781px) {
 

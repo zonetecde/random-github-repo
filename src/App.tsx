@@ -10,6 +10,7 @@ import GithubRepo from "./components/GithubRepo/GithubRepo";
 
 import LoadingWheel from "./icons/loading.gif";
 import SettingsIcon from "./icons/setting.png";
+import RemoveIcon from "./icons/remove.png";
 
 function App() {
   // Contient tout les topics github
@@ -197,8 +198,11 @@ function App() {
                 Selected topic{selectedTopics.length > 1 ? "s" : ""} :{" "}
                 {selectedTopics.map((topic, index) => {
                   return (
-                    <span key={index}>
-                      {topic}
+                    <span key={index} className="topic-text" onMouseDown={() => setSelectedTopics(selectedTopics.filter(x=> x !== topic))}>
+                      <span>{topic}</span>
+
+                      <img className="icon-delete-topic" src={RemoveIcon}/>
+
                       {/* On omet la virgule si c'est le dernier topic à afficher */}
                       {index === selectedTopics.length - 1 ? "" : ", "}
                     </span>
