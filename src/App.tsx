@@ -229,12 +229,15 @@ function App() {
 
   // Ajout le repo en favoris
   function addToFavorite(id: number) {
-    if (favoriteRepos.includes(id)) {
-      // l'enlève des favoris
-      let updatedFavoriteRepo = favoriteRepos.filter((topic) => topic !== id);
-      setFavoriteRepos(updatedFavoriteRepo);
-    } else {
-      setFavoriteRepos([...favoriteRepos, id]);
+    if(id !== -1)
+    {
+      if (favoriteRepos.includes(id)) {
+        // l'enlève des favoris
+        let updatedFavoriteRepo = favoriteRepos.filter((topic) => topic !== id);
+        setFavoriteRepos(updatedFavoriteRepo);
+      } else {
+        setFavoriteRepos([...favoriteRepos, id]);
+      }
     }
   }
 
