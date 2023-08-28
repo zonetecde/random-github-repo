@@ -6,8 +6,8 @@ import LoadingIcon from '../../icons/loading.gif'
 interface Props {
   repo: Repo;
   showReadme(repo: string): void;
-  addToFavorite(id: number): void;
-  favoriteRepos:number[];
+  addToFavorite(repo: Repo): void;
+  favoriteRepos:Repo[];
   isShowingFavorite:boolean;
 }
 
@@ -118,7 +118,7 @@ const GithubRepo = (props: Props) => {
         </div>
       </div>
 
-      <button className="bottom-p add-to-favorite-p" style={{backgroundColor: props.favoriteRepos.includes(props.repo.Id) ? "#0b4d33" : "" }} onMouseDown={()=>props.addToFavorite(props.repo.Id)}>{props.favoriteRepos.includes(props.repo.Id) ? "Unfavorite" : "Favorite"}</button>
+      <button className="bottom-p add-to-favorite-p" style={{backgroundColor: props.favoriteRepos.includes(props.repo) ? "#0b4d33" : "" }} onMouseDown={()=>props.addToFavorite(props.repo)}>{props.favoriteRepos.includes(props.repo) ? "Unfavorite" : "Favorite"}</button>
       <button className="bottom-p show-readme-p" onMouseDown={()=>props.showReadme(props.repo.Creator + "/" +props.repo.RepoName)}>README.md</button>
     </div>
   );

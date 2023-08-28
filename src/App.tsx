@@ -39,7 +39,7 @@ function App() {
   const [markdownContent, setMarkdownContent] = useState<string | null>(null);
 
   // Contient les repos favoris de l'utilisateur
-  const [favoriteRepos, setFavoriteRepos] = useState<number[]>([]);
+  const [favoriteRepos, setFavoriteRepos] = useState<Repo[]>([]);
   const [isShowingFavorite, setIsShowingFavorite] = useState<boolean>(false);
 
   // Contient le filtre du min et max de star
@@ -51,13 +51,14 @@ function App() {
   useMemo(() => {
     // Récupère les repos mis en favoris
     const storedNumbersArrayJSON = Cookie.getCookie("favoriteRepoCookie");
+    let storedRepoArray: Repo[] = [];
     if (storedNumbersArrayJSON) {
-      const storedNumbersArray: number[] = JSON.parse(storedNumbersArrayJSON);
-      setFavoriteRepos(storedNumbersArray);
+      storedRepoArray = JSON.parse(storedNumbersArrayJSON);
+      setFavoriteRepos(storedRepoArray);
+      console.log(storedRepoArray);
     } else {
       setFavoriteRepos([]);
     }
-
     // Récupère tout les topics depuis mon API Web
     fetch(AppVariables.ApiUrl + "/api/Rgr/get-github-topics")
       .then((response) => response.text())
@@ -77,6 +78,8 @@ function App() {
       JSON.stringify(favoriteRepos),
       365 * 5
     );
+
+
   }, [favoriteRepos]);
 
   // Hook: Les topics ont été ajoutés
@@ -228,15 +231,15 @@ function App() {
   }
 
   // Ajout le repo en favoris
-  function addToFavorite(id: number) {
-    if(id !== -1)
+  function addToFavorite(repo: Repo) {
+    if(repo.Id !== -1)
     {
-      if (favoriteRepos.includes(id)) {
+      if (favoriteRepos.includes(repo)) {
         // l'enlève des favoris
-        let updatedFavoriteRepo = favoriteRepos.filter((topic) => topic !== id);
+        let updatedFavoriteRepo = favoriteRepos.filter((_repo) => _repo.Id !== repo.Id);
         setFavoriteRepos(updatedFavoriteRepo);
       } else {
-        setFavoriteRepos([...favoriteRepos, id]);
+        setFavoriteRepos([...favoriteRepos, repo]);
       }
     }
   }
@@ -324,22 +327,7 @@ function App() {
               <h2 className="title-favorite">{favoriteRepos.length === 0 ? "No bookmarked repository" : favoriteRepos.length + " bookmarked repositor" + (favoriteRepos.length > 1 ? "ies" : "y")}</h2>
 
               <div className="container-favorite">
-                {favoriteRepos.map((repoId)=> {
-                  // récupère le repo depuis internet
-                  let _repo = new Repo();
-                  _repo.Id = repoId;
-
-                  // Appel à mon API pour avoir le repo depuis son Id
-                  fetch(
-                    AppVariables.ApiUrl +
-                      "/api/Rgr/get-github-repo?id=" + repoId                     
-                  )
-                    .then((response) => response.text())
-                    .then((repoJson) => {
-                      _repo = Repo.fromJSON(repoJson);
-                      setRepo(_repo);
-                    });
-                                
+                {favoriteRepos.map((_repo: Repo)=> {                               
                   return(<GithubRepo repo={_repo} showReadme={showReadme} isShowingFavorite={isShowingFavorite} addToFavorite={addToFavorite} favoriteRepos={favoriteRepos} />)
                 })}
               </div>
