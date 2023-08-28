@@ -10,6 +10,7 @@
   flex-direction: column;
 
   transition-duration: .5s;
+
 }
 
 .above {
@@ -21,7 +22,7 @@
 }
 
 .repo-icon {
-  fill: #7a7c80;
+  fill: #7a807e;
   margin-left: 3vh;
   margin-right: 1vh;
 }
@@ -236,17 +237,14 @@
   border-radius: 1vh;
 }
 
-.show-readme-p{
+.bottom-p{
   width: 12vh;
   height: 3vh;
   position: absolute;
   bottom: 0;
   right: 0;
 
-  border: 3px solid rgb(50, 50, 63);
-  border-bottom: none;
-  border-right: none;
-  border-radius: 1vh 0 0 0;
+
   background-color: #161b22;
   color: #e6edf3;
 
@@ -254,6 +252,25 @@
   transition-duration: .3s;
 }
 
+.show-readme-p{
+  border: 3px solid rgb(50, 50, 63);
+  border-bottom: none;
+  border-right: none;
+}
+
+.add-to-favorite-p{
+  right: 12vh;
+  border-radius: 1vh 0 0 0;
+  border: 3px solid rgb(50, 50, 63);
+  border-bottom: none;
+  border-right: none;
+
+}
+.add-to-favorite-p:hover{
+  transform: scale(1.1);
+  right: 12.7vh;
+  bottom: 0.2vh;
+}
 .show-readme-p:hover{
   transform: scale(1.1);
   right: 0.7vh;

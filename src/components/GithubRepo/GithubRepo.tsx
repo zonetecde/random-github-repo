@@ -5,7 +5,10 @@ import LoadingIcon from '../../icons/loading.gif'
 
 interface Props {
   repo: Repo;
-  showReadme(repo: string): void
+  showReadme(repo: string): void;
+  addToFavorite(id: number): void;
+  favoriteRepos:number[];
+  isShowingFavorite:boolean;
 }
 
 const GithubRepo = (props: Props) => {
@@ -24,9 +27,9 @@ const GithubRepo = (props: Props) => {
   }
 
   return (
-    <div className="repo-parent" style={{transform: props.repo.Id === -1 ? "scale(0.9)" : "scale(1)"}}>
+    <div className="repo-parent" style={{transform: props.repo.Id === -1 || props.isShowingFavorite ? "scale(0.9)" : "scale(1)"}}>
       
-      {props.repo.Id === -1 ? <div className="loading-div"><img src={LoadingIcon} className="loading-icon"/></div> : <></>}
+      {props.repo.Id === -1 || (props.isShowingFavorite && props.repo.Creator === "")  ? <div className="loading-div"><img src={LoadingIcon} className="loading-icon"/></div> : <></>}
       
       <div className="above">
         <svg
@@ -115,7 +118,8 @@ const GithubRepo = (props: Props) => {
         </div>
       </div>
 
-      <button className="show-readme-p" onMouseDown={()=>props.showReadme(props.repo.Creator + "/" +props.repo.RepoName)}>README.me</button>
+      <button className="bottom-p add-to-favorite-p" style={{backgroundColor: props.favoriteRepos.includes(props.repo.Id) ? "#0b4d33" : "" }} onMouseDown={()=>props.addToFavorite(props.repo.Id)}>{props.favoriteRepos.includes(props.repo.Id) ? "Unfavorite" : "Favorite"}</button>
+      <button className="bottom-p show-readme-p" onMouseDown={()=>props.showReadme(props.repo.Creator + "/" +props.repo.RepoName)}>README.md</button>
     </div>
   );
 };

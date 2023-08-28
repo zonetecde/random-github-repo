@@ -33,6 +33,8 @@ h1 {
 
   display: flex;
   align-items: center;
+
+  position: relative;
 }
 
 
@@ -238,20 +240,22 @@ input[type=number]::-webkit-outer-spin-button {
   height: 2vh;
 }
 
-.settings-icon{
+.favorite-icon{
   position: absolute;
-  right: 12vh;
+  right: 2vh;
   margin-top: 2vh;
 
   width: 4vh;
   height: 4vh;
+
+  cursor: pointer;
 }
 
 .markdown-shower{
   position: absolute;
   background-color: rgba(0, 0, 0, 0.5);
-  width: 90%;
-  height: 75%;
+  width: 100%;
+  height: 100%;
   transition-duration: .5s;
 }
 
@@ -291,6 +295,24 @@ table {
 th, td {
   padding: 5px;
   border: 1px solid rgb(253, 251, 251);
+}
+
+.favorite-div{
+  width: 100%;
+  height: 95%;
+}
+
+.title-favorite{
+  color: #e6edf3;
+  font-size: 4vh;
+}
+
+.container-favorite{
+  display: flex;
+  flex-wrap: wrap;
+  padding-left:1.75vh;
+  justify-content: center;
+  align-items: center;
 }
 
 
@@ -337,6 +359,7 @@ th, td {
   .div-right-side{
     height: 20vh;
     overflow-y:visible;
+    position: relative;
   }
   .get-repo-button{
     margin-top: 17vh;
@@ -355,6 +378,22 @@ th, td {
   }
   .markdown-page{
     overflow-x: auto;
+  }
+  .favorite-icon{
+    left: 0;
+    margin-top: 4vh;
+  }
+  .favorite-div{
+    margin: 0 auto;
+    width: 80%;
+  }
+  .container-favorite{
+    width: 95%;
+    margin-top: 7.5vh;
+    display: flex;
+    flex-direction: row;
+    row-gap: 5vh;
+    column-gap: 20vh;
   }
 }
 
