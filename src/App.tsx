@@ -120,8 +120,11 @@ function App() {
     method: "POST"
   });
 
-  setAddingTopicInfo("The topic \"" + topicName + "\" has been successfully added.\n\nPlease reload the page to see the topic");
-  }
+  setAddingTopicInfo("The topic \"" + topicName + "\" has been successfully added.\n\nPlease reload the page to see the topic.\nNew repos in this topic will be added within 12 hours.");
+  
+  
+
+}
 
   /**
   * Met à jour le nombre de référentiels en effectuant un appel API pour récupérer le nombre total de référentiels
