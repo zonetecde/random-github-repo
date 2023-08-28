@@ -55,7 +55,6 @@ function App() {
     if (storedNumbersArrayJSON) {
       storedRepoArray = JSON.parse(storedNumbersArrayJSON);
       setFavoriteRepos(storedRepoArray);
-      console.log(storedRepoArray);
     } else {
       setFavoriteRepos([]);
     }
@@ -328,7 +327,7 @@ function App() {
 
               <div className="container-favorite">
                 {favoriteRepos.map((_repo: Repo)=> {                               
-                  return(<GithubRepo repo={_repo} showReadme={showReadme} isShowingFavorite={isShowingFavorite} addToFavorite={addToFavorite} favoriteRepos={favoriteRepos} />)
+                  return(<GithubRepo repo={_repo} key={_repo.Id} showReadme={showReadme} isShowingFavorite={isShowingFavorite} addToFavorite={addToFavorite} favoriteRepos={favoriteRepos} />)
                 })}
               </div>
             </div>
