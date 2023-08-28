@@ -5,12 +5,14 @@ class Topic{
     Url: string;
     Id: number;
     NumberOfRepo: number;
+    Tag: string;
 
     constructor(){
         this.Name = "";
         this.ImgUrl = "";
         this.Description = "";
         this.Url = "";
+        this.Tag = "";
         this.NumberOfRepo = 0;
         this.Id = 0;
     }
@@ -28,6 +30,7 @@ class Topic{
             topic.Description = topicJson.description || "";
             topic.Url = topicJson.url || "";
             topic.Id = topicJson.id || 0;
+            topic.Tag = topicJson.tag || "";
             topic.NumberOfRepo = topicJson.numberOfRepo || 0;
 
             topics.push(topic);

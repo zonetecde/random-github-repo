@@ -362,7 +362,7 @@ th, td {
     position: relative;
   }
   .get-repo-button{
-    margin-top: 17vh;
+    margin-top: 2vh;
     margin-right: 3vh;
   }
 
@@ -374,6 +374,7 @@ th, td {
   }
   .markdown-shower{
     height: 100%;
+    bottom: -36vh;
     background-color: rgb(0, 0, 0);
   }
   .markdown-page{
@@ -414,5 +415,79 @@ th, td {
   }
   .p-star-filter{
     margin-bottom: -.8vh;
+  }
+}
+
+.p-no-topic{
+  color: #e6edf3;
+  font-size: 2vh;
+
+  transition-duration: .5s;
+}
+
+.button-ask-for-topic{
+  border:  2px solid rgb(21, 82, 79);
+  transition-duration: .5s;
+  padding: .75vh 2vh 0.75vh 2vh;
+  border-radius: 2vh;
+  background-color: #b2daeb;
+  color: #0D1117;
+  font-size: 2vh;
+  cursor: pointer;
+}
+
+.button-ask-for-topic:hover{
+  transform: scale(1.1);
+  background-color: #9bb2d3;
+}
+
+.p-topic-info{
+  color:rgb(211, 160, 160);
+  margin-bottom: .9vh;
+}
+
+.input-add-topic{
+  height: 4vh;
+  width: 20vh;
+  padding-left: 1vh;
+  border: none;
+  box-shadow: 1vh 1vh 3vh black;
+  border-radius: 1vh;
+}
+
+.input-description{
+  height: 10vh;
+  margin-left: 2vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 1vh;
+  width: 43vh;
+  margin-top: 2vh;
+}
+
+.button-add-the-topic{
+  margin-right: 2vh;
+}
+
+.input-add-topic::placeholder{
+  font-weight: bold;
+}
+.input-description::placeholder{
+  font-weight:500 !important;
+}
+
+.input-add-topic:first-of-type{
+  margin-right: 2vh;
+}
+
+
+@media (max-width: 1260px) {
+  .input-add-topic{
+    margin-top: 1vh;
+  }
+  .input-add-topic:first-of-type{
+    margin-left: 2vh;
+  }
+  .input-description{
+    width: 80%;
   }
 }

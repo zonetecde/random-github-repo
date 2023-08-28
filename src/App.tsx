@@ -38,6 +38,10 @@ function App() {
   // Contient le code markdown du repo en cours
   const [markdownContent, setMarkdownContent] = useState<string | null>(null);
 
+  // Contient si l'utilisateur demande l'ajout d'un nouveau topic
+  const [isAskingForTopic, setIsAskingForTopic] = useState<boolean>(false);
+  const [addingTopicInfo, setAddingTopicInfo] = useState<string>("");
+
   // Contient les repos favoris de l'utilisateur
   const [favoriteRepos, setFavoriteRepos] = useState<Repo[]>([]);
   const [isShowingFavorite, setIsShowingFavorite] = useState<boolean>(false);
@@ -71,14 +75,12 @@ function App() {
 
   // Hook: Repos en favoris mis à jour
   useEffect(() => {
-    // On sauvegarde l'array dans les cookies
+    // On sauvegarde l'array des repos favoris dans les cookies
     Cookie.setCookie(
       "favoriteRepoCookie",
       JSON.stringify(favoriteRepos),
       365 * 5
     );
-
-
   }, [favoriteRepos]);
 
   // Hook: Les topics ont été ajoutés
@@ -98,6 +100,33 @@ function App() {
     updateRepoCount();
   }, [selectedTopics]);
 
+  // Ajoute le topic demandé
+  function addTopic(){
+    let topicName:string = topicNameInputRef.current?.value!;
+    let topicDescription:string = topicDescriptionInputRef.current?.value!;
+    let topicTag:string = topicTagInputRef.current?.value!;
+    if(topicName === "" || topicTag === ""){
+      setAddingTopicInfo("Please fill the topic name and tag fields");
+      return;
+    }
+
+    const existingTopic = topics.find((t) => t.Tag === topicTag);
+    if (existingTopic) {
+      setAddingTopicInfo("This topic already exists under the name of " + existingTopic.Name);
+      return;
+    }
+
+  fetch(AppVariables.ApiUrl + "/api/rgr/add-github-topic?name=" + encodeURIComponent(topicName) + "&description=" + encodeURIComponent(topicDescription) + "&tag=" + encodeURIComponent(topicTag), {
+    method: "POST"
+  });
+
+  setAddingTopicInfo("The topic \"" + topicName + "\" has been successfully added.\n\nPlease reload the page to see the topic");
+  }
+
+  /**
+  * Met à jour le nombre de référentiels en effectuant un appel API pour récupérer le nombre total de référentiels
+  * en fonction des sujets sélectionnés, des filtres d'étoiles.
+  */  
   function updateRepoCount() {
     // Get le nbre de repo total qui se trouve dans tout les topics sélectionnés
     // Le temps de faire l'appel API on le met à -1
@@ -125,6 +154,12 @@ function App() {
   let minStarInputRef: React.RefObject<HTMLInputElement> = React.createRef();
   let maxStarInputRef: React.RefObject<HTMLInputElement> = React.createRef();
 
+  // Ref à la form pour add des topics
+  let topicNameInputRef: React.RefObject<HTMLInputElement> = React.createRef();
+  let topicDescriptionInputRef: React.RefObject<HTMLTextAreaElement> = React.createRef();
+  let topicTagInputRef: React.RefObject<HTMLInputElement> = React.createRef();
+
+
   const handleKeyDown = (event: KeyboardEvent) => {
     // Handle the keydown event here
     if (
@@ -147,39 +182,30 @@ function App() {
   // // //
   // Affiche un repo random
   function showRandomRepo() {
-    var topics: string = "";
-
     // Si l'utilisateur a spécifié des topics, on les prends en compte sauf
     // s'il n'y a aucun repo trouvé pour ces topics
-    if (selectedTopics.length > 0 && numberOfRepo >= 1) {
+    if (numberOfRepo >= 1 || numberOfRepo === -1) {
       // Choisi un topic random parmis ceux sélectionnés
-      topics = selectedTopics.toString();
+      var topics = selectedTopics.toString();
+
+      // animation (le component va voir que .Id = -1)
+      let updatedRepo = { ...repo, Id: -1 };
+      setRepo(updatedRepo);
+
+      // Appel à mon API pour avoir un repo random
+      fetch(`${AppVariables.ApiUrl}/api/Rgr/get-random-github-repo?topics=${encodeURIComponent(topics)}&minStar=${starFilter[0]}&maxStar=${starFilter[1]}`)
+        .then((response) => response.text())
+        .then((repoJson) => {
+          let _repo = Repo.fromJSON(repoJson);
+          setRepo(_repo);
+
+          // si la page markdown est déjà ouverte alors on simule son ouverture
+          if (markdownContent !== null)
+            showReadme(`${_repo.Creator}/${_repo.RepoName}`);
+        });
     }
-
-    // animation (le component va voir que .Id = -1)
-    let updatedRepo = { ...repo, Id: -1 };
-    setRepo(updatedRepo);
-
-    // Appel à mon API pour avoir un repo random
-    fetch(
-      AppVariables.ApiUrl +
-        "/api/Rgr/get-random-github-repo?topics=" +
-        encodeURIComponent(topics) +
-        "&minStar=" +
-        starFilter[0] +
-        "&maxStar=" +
-        starFilter[1]
-    )
-      .then((response) => response.text())
-      .then((repoJson) => {
-        let _repo = Repo.fromJSON(repoJson);
-        setRepo(_repo);
-
-        // si la page markdown est déjà ouverte alors on simule son ouverture
-        if (markdownContent !== null)
-          showReadme(_repo.Creator + "/" + _repo.RepoName);
-      });
   }
+
 
   // Met à jour le filtre, mais attend d'abord
   // 2 secondes pour être sûrs que rien n'est touché
@@ -206,28 +232,31 @@ function App() {
     }, 1250);
   }
 
-  // Affiche le read.md
+  // Affiche le readme.md
   // repo au format : createur/nom_du_repo
-  function showReadme(repo: string) {
-    setMarkdownContent("Loading markdown...");
+// Affiche le read.md
+// repo au format : createur/nom_du_repo
+async function showReadme(repo: string) {
+  setMarkdownContent("Loading markdown...");
 
-    fetch("https://raw.githubusercontent.com/" + repo + "/master/README.md")
-      .then((response) => response.text())
-      .then((markdown) => {
-        if (markdown === "404: Not Found")
-          setMarkdownContent("No README.md found");
-        else {
-          // remplace toutes les urls d'img relatif en url complète vers l'img dans le repo
-          // src="/
-          const updatedMarkdown = markdown.replace(
-            /!\[([^\]]+)\]\((\/[^)]+\.(png|jpg|jpeg|gif))\)/g,
-            `![\$1](https://raw.githubusercontent.com/${repo + "/master/"}\$2)`
-          );
+  try {
+    const response = await fetch(`https://raw.githubusercontent.com/${repo}/master/README.md`);
+    const markdown = await response.text();
 
-          setMarkdownContent(updatedMarkdown);
-        }
-      });
+    if (markdown === "404: Not Found") {
+      setMarkdownContent("No README.md found");
+    } else {
+      const updatedMarkdown = markdown.replace(
+        /!\[([^\]]+)\]\((\/[^)]+\.(png|jpg|jpeg|gif))\)/g,
+        `![\$1](https://raw.githubusercontent.com/${repo}/master/\$2)`
+      );
+
+      setMarkdownContent(updatedMarkdown);
+    }
+  } catch (error: any) {
+    setMarkdownContent("Error loading markdown\n\n" + error.message);
   }
+}
 
   // Ajout le repo en favoris
   function addToFavorite(repo: Repo) {
@@ -279,6 +308,20 @@ function App() {
                 )
               );
             })}
+
+            <div>
+              <p className="p-no-topic">{isAskingForTopic ? "Add a new topic" : "You can't find what you're looking for ?"}</p>
+              <form className="form-add-new-topic" style={{display: isAskingForTopic ? "" : "none"}}>
+              <p className="p-topic-info">{addingTopicInfo}</p>
+              <input maxLength={32} ref={topicNameInputRef} className="input-add-topic" type="text" placeholder="Topic name | e.g. C#"/>
+              <input maxLength={32} ref={topicTagInputRef} className="input-add-topic" type="text" placeholder="Tag | e.g. csharp" />
+              <br/>
+              <textarea className="input-add-topic input-description" ref={topicDescriptionInputRef} placeholder="Description | e.g. C# is a programming language for developing applications"/>
+              <br/><br/>
+              </form>
+              <button style={{display: isAskingForTopic ? "" : "none"}} className="button-ask-for-topic button-add-the-topic" onClick={() => addTopic()}>Add the topic</button>
+              <button  className="button-ask-for-topic" style={{width: isAskingForTopic ? "15vh" : ""}} onClick={() => setIsAskingForTopic(!isAskingForTopic)}>{isAskingForTopic ? "Cancel" : "Ask for it !"}</button>
+            </div>
           </div>
 
           <div className="div-star-filter">
@@ -315,7 +358,7 @@ function App() {
         <div className="div-right-side style-1" style={{width: isShowingFavorite ? "100%" : ""}}>
           <img
             className="favorite-icon"
-            src={isShowingFavorite ? DiceIcon : FavoriteIcon}
+            src={isShowingFavorite ? RemoveIcon : FavoriteIcon}
             onMouseDown={() => {
               setIsShowingFavorite(!isShowingFavorite);
             }}
