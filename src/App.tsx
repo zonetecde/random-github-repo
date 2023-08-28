@@ -321,7 +321,7 @@ function App() {
 
           {isShowingFavorite ? (
             <div className="favorite-div">
-              <h2 className="title-favorite">{favoriteRepos.length === 0 ? "No bookmarked repository" : favoriteRepos.length + "repositor" + (favoriteRepos.length > 1 ? "ies" : "y") + "bookmarked"}</h2>
+              <h2 className="title-favorite">{favoriteRepos.length === 0 ? "No bookmarked repository" : favoriteRepos.length + " bookmarked repositor" + (favoriteRepos.length > 1 ? "ies" : "y")}</h2>
 
               <div className="container-favorite">
                 {favoriteRepos.map((repoId)=> {
