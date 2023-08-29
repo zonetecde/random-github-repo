@@ -568,11 +568,9 @@ function App() {
             />
 
             {/*@ts-expect-error*/}
-            <ReactMarkdown
-              rehypePlugins={[rehypeRaw]}
+            <ReactMarkdown rehypePlugins={[rehypeRaw]}
               remarkPlugins={[remarkGfm]}
-              children={markdownContent ?? ""}
-            />
+              children={markdownContent ?? ""}/>
           </div>
         </div>
       </div>
