@@ -101,36 +101,48 @@ function App() {
   }, [selectedTopics]);
 
   // Ajoute le topic demandé
-  function addTopic(){
-    let topicName:string = topicNameInputRef.current?.value!;
-    let topicDescription:string = topicDescriptionInputRef.current?.value!;
-    let topicTag:string = topicTagInputRef.current?.value!;
-    
-    if(topicName === "" || topicTag === ""){
+  function addTopic() {
+    let topicName: string = topicNameInputRef.current?.value!;
+    let topicDescription: string = topicDescriptionInputRef.current?.value!;
+    let topicTag: string = topicTagInputRef.current?.value!;
+
+    if (topicName === "" || topicTag === "") {
       setAddingTopicInfo("Please fill the topic name and tag fields");
       return;
     }
 
     const existingTopic = topics.find((t) => t.Tag === topicTag);
     if (existingTopic) {
-      setAddingTopicInfo("This topic already exists under the name of " + existingTopic.Name);
+      setAddingTopicInfo(
+        "This topic already exists under the name of " + existingTopic.Name
+      );
       return;
     }
 
-  fetch(AppVariables.ApiUrl + "/api/rgr/add-github-topic?name=" + encodeURIComponent(topicName) + "&description=" + encodeURIComponent(topicDescription) + "&tag=" + encodeURIComponent(topicTag), {
-    method: "POST"
-  });
+    fetch(
+      AppVariables.ApiUrl +
+        "/api/rgr/add-github-topic?name=" +
+        encodeURIComponent(topicName) +
+        "&description=" +
+        encodeURIComponent(topicDescription) +
+        "&tag=" +
+        encodeURIComponent(topicTag),
+      {
+        method: "POST",
+      }
+    );
 
-  setAddingTopicInfo("The topic \"" + topicName + "\" has been successfully added.\n\nPlease reload the page to see the topic.\nNew repos in this topic will be added within 12 hours.");
-  
-  
-
-}
+    setAddingTopicInfo(
+      'The topic "' +
+        topicName +
+        '" has been successfully added.\n\nPlease reload the page to see the topic.\nNew repos in this topic will be added within 12 hours.'
+    );
+  }
 
   /**
-  * Met à jour le nombre de référentiels en effectuant un appel API pour récupérer le nombre total de référentiels
-  * en fonction des sujets sélectionnés, des filtres d'étoiles.
-  */  
+   * Met à jour le nombre de référentiels en effectuant un appel API pour récupérer le nombre total de référentiels
+   * en fonction des sujets sélectionnés, des filtres d'étoiles.
+   */
   function updateRepoCount() {
     // Get le nbre de repo total qui se trouve dans tout les topics sélectionnés
     // Le temps de faire l'appel API on le met à -1
@@ -160,9 +172,9 @@ function App() {
 
   // Ref à la form pour add des topics
   let topicNameInputRef: React.RefObject<HTMLInputElement> = React.createRef();
-  let topicDescriptionInputRef: React.RefObject<HTMLTextAreaElement> = React.createRef();
+  let topicDescriptionInputRef: React.RefObject<HTMLTextAreaElement> =
+    React.createRef();
   let topicTagInputRef: React.RefObject<HTMLInputElement> = React.createRef();
-
 
   const handleKeyDown = (event: KeyboardEvent) => {
     // Handle the keydown event here
@@ -197,7 +209,13 @@ function App() {
       setRepo(updatedRepo);
 
       // Appel à mon API pour avoir un repo random
-      fetch(`${AppVariables.ApiUrl}/api/Rgr/get-random-github-repo?topics=${encodeURIComponent(topics)}&minStar=${starFilter[0]}&maxStar=${starFilter[1]}`)
+      fetch(
+        `${
+          AppVariables.ApiUrl
+        }/api/Rgr/get-random-github-repo?topics=${encodeURIComponent(
+          topics
+        )}&minStar=${starFilter[0]}&maxStar=${starFilter[1]}`
+      )
         .then((response) => response.text())
         .then((repoJson) => {
           let _repo = Repo.fromJSON(repoJson);
@@ -209,7 +227,6 @@ function App() {
         });
     }
   }
-
 
   // Met à jour le filtre, mais attend d'abord
   // 2 secondes pour être sûrs que rien n'est touché
@@ -238,37 +255,44 @@ function App() {
 
   // Affiche le readme.md
   // repo au format : createur/nom_du_repo
-// Affiche le read.md
-// repo au format : createur/nom_du_repo
-async function showReadme(repo: string) {
-  setMarkdownContent("Loading markdown...");
+  // Affiche le read.md
+  // repo au format : createur/nom_du_repo
+  async function showReadme(repo: string) {
+    setMarkdownContent("Loading markdown...");
 
-  try {
-    const response = await fetch(`https://raw.githubusercontent.com/${repo}/master/README.md`);
-    const markdown = await response.text();
+    try {
+      const response = await fetch(
+        `https://raw.githubusercontent.com/${repo}/master/README.md`
+      );
+      const markdown = await response.text();
 
-    if (markdown === "404: Not Found") {
-      setMarkdownContent("No README.md found");
-    } else {
-      const updatedMarkdown = markdown.replaceAll("](", "](/").replaceAll("](//", "](/").replaceAll(
-        /!\[([^\]]+)\]\((\/[^)]+\.(png|jpg|jpeg|gif))\)/g,
-        `![\$1](https://raw.githubusercontent.com/${repo}/master/\$2)`
-      ).replaceAll("/https","https");
+      if (markdown === "404: Not Found") {
+        setMarkdownContent("No README.md found");
+      } else {
+        const updatedMarkdown = markdown
+          .replaceAll("](", "](/")
+          .replaceAll("](//", "](/")
+          .replaceAll(
+            /!\[([^\]]+)\]\((\/[^)]+\.(png|jpg|jpeg|gif))\)/g,
+            `![\$1](https://raw.githubusercontent.com/${repo}/master/\$2)`
+          )
+          .replaceAll("/https", "https");
 
-      setMarkdownContent(updatedMarkdown);
+        setMarkdownContent(updatedMarkdown);
+      }
+    } catch (error: any) {
+      setMarkdownContent("Error loading markdown\n\n" + error.message);
     }
-  } catch (error: any) {
-    setMarkdownContent("Error loading markdown\n\n" + error.message);
   }
-}
 
   // Ajout le repo en favoris
   function addToFavorite(repo: Repo) {
-    if(repo.Id !== -1)
-    {
+    if (repo.Id !== -1) {
       if (favoriteRepos.includes(repo)) {
         // l'enlève des favoris
-        let updatedFavoriteRepo = favoriteRepos.filter((_repo) => _repo.Id !== repo.Id);
+        let updatedFavoriteRepo = favoriteRepos.filter(
+          (_repo) => _repo.Id !== repo.Id
+        );
         setFavoriteRepos(updatedFavoriteRepo);
       } else {
         setFavoriteRepos([...favoriteRepos, repo]);
@@ -283,7 +307,10 @@ async function showReadme(repo: string) {
       </h1>
 
       <div className="parent">
-        <div className="div-left-side topic-container" style={{display: isShowingFavorite ? "none" : ""}}>
+        <div
+          className="div-left-side topic-container"
+          style={{ display: isShowingFavorite ? "none" : "" }}
+        >
           <input
             className="search-input"
             ref={searchInputRef}
@@ -314,17 +341,53 @@ async function showReadme(repo: string) {
             })}
 
             <div>
-              <p className="p-no-topic">{isAskingForTopic ? "Add a new topic" : "You can't find what you're looking for ?"}</p>
-              <form className="form-add-new-topic" style={{display: isAskingForTopic ? "" : "none"}}>
-              <p className="p-topic-info">{addingTopicInfo}</p>
-              <input maxLength={32} ref={topicNameInputRef} className="input-add-topic" type="text" placeholder="Topic name | e.g. C#"/>
-              <input maxLength={32} ref={topicTagInputRef} className="input-add-topic" type="text" placeholder="Tag | e.g. csharp" />
-              <br/>
-              <textarea className="input-add-topic input-description" ref={topicDescriptionInputRef} placeholder="Description | e.g. C# is a programming language for developing applications"/>
-              <br/><br/>
+              <p className="p-no-topic">
+                {isAskingForTopic
+                  ? "Add a new topic"
+                  : "You can't find what you're looking for ?"}
+              </p>
+              <form
+                className="form-add-new-topic"
+                style={{ display: isAskingForTopic ? "" : "none" }}
+              >
+                <p className="p-topic-info">{addingTopicInfo}</p>
+                <input
+                  maxLength={32}
+                  ref={topicNameInputRef}
+                  className="input-add-topic"
+                  type="text"
+                  placeholder="Topic name | e.g. C#"
+                />
+                <input
+                  maxLength={32}
+                  ref={topicTagInputRef}
+                  className="input-add-topic"
+                  type="text"
+                  placeholder="Tag | e.g. csharp"
+                />
+                <br />
+                <textarea
+                  className="input-add-topic input-description"
+                  ref={topicDescriptionInputRef}
+                  placeholder="Description | e.g. C# is a programming language for developing applications"
+                />
+                <br />
+                <br />
               </form>
-              <button style={{display: isAskingForTopic ? "" : "none"}} className="button-ask-for-topic button-add-the-topic" onClick={() => addTopic()}>Add the topic</button>
-              <button  className="button-ask-for-topic" style={{width: isAskingForTopic ? "15vh" : ""}} onClick={() => setIsAskingForTopic(!isAskingForTopic)}>{isAskingForTopic ? "Cancel" : "Ask for it !"}</button>
+              <button
+                style={{ display: isAskingForTopic ? "" : "none" }}
+                className="button-ask-for-topic button-add-the-topic"
+                onClick={() => addTopic()}
+              >
+                Add the topic
+              </button>
+              <button
+                className="button-ask-for-topic"
+                style={{ width: isAskingForTopic ? "15vh" : "" }}
+                onClick={() => setIsAskingForTopic(!isAskingForTopic)}
+              >
+                {isAskingForTopic ? "Cancel" : "Ask for it !"}
+              </button>
             </div>
           </div>
 
@@ -359,7 +422,10 @@ async function showReadme(repo: string) {
           </div>
         </div>
 
-        <div className="div-right-side style-1" style={{width: isShowingFavorite ? "100%" : ""}}>
+        <div
+          className="div-right-side style-1"
+          style={{ width: isShowingFavorite ? "100%" : "" }}
+        >
           <img
             className="favorite-icon"
             src={isShowingFavorite ? RemoveIcon : FavoriteIcon}
@@ -370,11 +436,26 @@ async function showReadme(repo: string) {
 
           {isShowingFavorite ? (
             <div className="favorite-div">
-              <h2 className="title-favorite">{favoriteRepos.length === 0 ? "No bookmarked repository" : favoriteRepos.length + " bookmarked repositor" + (favoriteRepos.length > 1 ? "ies" : "y")}</h2>
+              <h2 className="title-favorite">
+                {favoriteRepos.length === 0
+                  ? "No bookmarked repository"
+                  : favoriteRepos.length +
+                    " bookmarked repositor" +
+                    (favoriteRepos.length > 1 ? "ies" : "y")}
+              </h2>
 
               <div className="container-favorite">
-                {favoriteRepos.map((_repo: Repo)=> {                               
-                  return(<GithubRepo repo={_repo} key={_repo.Id} showReadme={showReadme} isShowingFavorite={isShowingFavorite} addToFavorite={addToFavorite} favoriteRepos={favoriteRepos} />)
+                {favoriteRepos.map((_repo: Repo) => {
+                  return (
+                    <GithubRepo
+                      repo={_repo}
+                      key={_repo.Id}
+                      showReadme={showReadme}
+                      isShowingFavorite={isShowingFavorite}
+                      addToFavorite={addToFavorite}
+                      favoriteRepos={favoriteRepos}
+                    />
+                  );
                 })}
               </div>
             </div>
@@ -485,9 +566,13 @@ async function showReadme(repo: string) {
               className="remove-icon-md"
               onMouseDown={() => setMarkdownContent(null)}
             />
-            
+
             {/*@ts-expect-error*/}
-            <ReactMarkdown rehypePlugins={[rehypeRaw]} remarkPlugins={[remarkGfm]} children={markdownContent ?? ""} />
+            <ReactMarkdown
+              rehypePlugins={[rehypeRaw]}
+              remarkPlugins={[remarkGfm]}
+              children={markdownContent ?? ""}
+            />
           </div>
         </div>
       </div>
