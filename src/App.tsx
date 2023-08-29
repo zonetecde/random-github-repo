@@ -105,6 +105,7 @@ function App() {
     let topicName:string = topicNameInputRef.current?.value!;
     let topicDescription:string = topicDescriptionInputRef.current?.value!;
     let topicTag:string = topicTagInputRef.current?.value!;
+    
     if(topicName === "" || topicTag === ""){
       setAddingTopicInfo("Please fill the topic name and tag fields");
       return;
@@ -249,10 +250,10 @@ async function showReadme(repo: string) {
     if (markdown === "404: Not Found") {
       setMarkdownContent("No README.md found");
     } else {
-      const updatedMarkdown = markdown.replace(
+      const updatedMarkdown = markdown.replaceAll("](", "](/").replaceAll("](//", "](/").replaceAll(
         /!\[([^\]]+)\]\((\/[^)]+\.(png|jpg|jpeg|gif))\)/g,
         `![\$1](https://raw.githubusercontent.com/${repo}/master/\$2)`
-      );
+      ).replaceAll("/https","https");
 
       setMarkdownContent(updatedMarkdown);
     }

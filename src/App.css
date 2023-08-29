@@ -479,6 +479,10 @@ th, td {
   margin-right: 2vh;
 }
 
+.markdown-page img{
+  width: 50%;
+  height: 50%;
+}
 
 @media (max-width: 1260px) {
   .input-add-topic{
