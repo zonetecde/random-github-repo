@@ -260,6 +260,8 @@ function App() {
   async function showReadme(repo: string) {
     setMarkdownContent("Loading markdown...");
 
+
+    repo = "ghdna/athena-express";
     try {
       const response = await fetch(
         `https://raw.githubusercontent.com/${repo}/master/README.md`
@@ -273,9 +275,10 @@ function App() {
           .replaceAll("](", "](/")
           .replaceAll("](//", "](/")
           .replaceAll(
-            /!\[([^\]]+)\]\((\/[^)]+\.(png|jpg|jpeg|gif))\)/g,
-            `![\$1](https://raw.githubusercontent.com/${repo}/master/\$2)`
+            /!\[([^\]]+)\]\((?!.*(?:https?|www)).*\/([^)]+\.(?:png|jpg|jpeg|gif))\)/g,
+            `!\$1(https://raw.githubusercontent.com/${repo}/master/\$2)`
           )
+
           .replaceAll("/https", "https");
 
         setMarkdownContent(updatedMarkdown);
