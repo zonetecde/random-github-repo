@@ -19,14 +19,14 @@ const GithubTopic = (props: Props) => {
     var updatedSelectedTopics: string[] = [];
 
     // S'il était déjà dans la liste des topics sélectionnés alors on l'enlève
-    if (props.selectedTopics.includes(props.Topic.Name)) {
+    if (props.selectedTopics.includes(props.Topic.Tag)) {
       updatedSelectedTopics = props.selectedTopics.filter(
-        (topic) => topic !== props.Topic.Name
+        (topic) => topic !== props.Topic.Tag
       );
       props.setSelectedTopics(updatedSelectedTopics);
     } else {
       // Sinon on l'ajoute parmis les topics sélectionnés
-      updatedSelectedTopics = [...props.selectedTopics, props.Topic.Name];
+      updatedSelectedTopics = [...props.selectedTopics, props.Topic.Tag];
       props.setSelectedTopics(updatedSelectedTopics);
     }
   }
@@ -38,7 +38,7 @@ const GithubTopic = (props: Props) => {
         onMouseDown={topicSelected}
         // Effet de "topic sélectionné"
         style={{
-          backgroundColor: props.selectedTopics.includes(props.Topic.Name)
+          backgroundColor: props.selectedTopics.includes(props.Topic.Tag)
             ? "#2A3B4F"
             : "",
         }}

@@ -111,7 +111,17 @@ function App() {
       return;
     }
 
+    const existingTopicName = topics.find((t) => t.Name === topicName);
+    if (existingTopicName) {
+      setAddingTopicInfo(
+        "This topic already exist."
+      );
+      return;
+    }
+
+
     const existingTopic = topics.find((t) => t.Tag === topicTag);
+
     if (existingTopic) {
       setAddingTopicInfo(
         "This topic already exists under the name of " + existingTopic.Name
@@ -181,6 +191,7 @@ function App() {
     if (
       event.key === " " &&
       document.activeElement?.className !== "search-input" &&
+      !document.activeElement?.className.includes("input-add-topic") &&
       markdownContent === null
     ) {
       showRandomRepo();
@@ -329,7 +340,7 @@ function App() {
               return (
                 // Affiche uniquement le topic si ce dernier se trouve dans la recherche
                 // OU si il n'y a pas de recherche
-                topic.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                (topic.Name + " " + topic.Tag).toLowerCase().includes(searchTerm.toLowerCase()) ||
                   searchTerm === "" ? (
                   <GithubTopic
                     selectedTopics={selectedTopics}
