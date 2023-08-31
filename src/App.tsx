@@ -191,8 +191,7 @@ function App() {
     if (
       event.key === " " &&
       document.activeElement?.className !== "search-input" &&
-      !document.activeElement?.className.includes("input-add-topic") &&
-      markdownContent === null
+      !document.activeElement?.className.includes("input-add-topic")
     ) {
       showRandomRepo();
     }
@@ -271,8 +270,6 @@ function App() {
   async function showReadme(repo: string) {
     setMarkdownContent("Loading markdown...");
 
-
-    repo = "ghdna/athena-express";
     try {
       const response = await fetch(
         `https://raw.githubusercontent.com/${repo}/master/README.md`

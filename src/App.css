@@ -485,6 +485,10 @@ th, td {
   height: 70%;
 }
 
+.markdown-page a{
+  color: #9af3c6;
+}
+
 @media (max-width: 1260px) {
   .input-add-topic{
     margin-top: 1vh;
