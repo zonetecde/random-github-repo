@@ -1,5 +1,6 @@
 # Random Github Repo
-Source code of the [Random Github Repo](https://www.rayanestaszewski.fr/randomgithubrepo/) website aka my first web project using React
+
+Source code of the [Random Github Repo](www.randomgithubrepo.site) website
 
 ---
 
