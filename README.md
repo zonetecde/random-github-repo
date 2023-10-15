@@ -1,6 +1,6 @@
 # Random Github Repo
 
-Source code of the [Random Github Repo](www.randomgithubrepo.site) website
+Source code of the [Random Github Repo](https://www.randomgithubrepo.site) website
 
 ---
 
