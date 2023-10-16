@@ -1,4 +1,6 @@
-# Random Github Repo
+# Random Github Repository Generator 
+
+A website that give you random GitHub repository to get inspired
 
 Source code of the [Random Github Repo](https://www.randomgithubrepo.site) website
 
