@@ -1,0 +1,1 @@
+console.log(indexedDB.js0);
