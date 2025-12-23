@@ -6,7 +6,7 @@ Please go to the new version of the website here [random-github-repo-2](https://
 ---
 A website that give you random GitHub repository to get inspired
 
-Source code of the [Random Github Repo](https://www.randomgithubrepo.site) website
+Source code of the [Random Github Repo](https://www.randomgithubrepo.site) website.
 
 ---
 
