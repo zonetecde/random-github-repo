@@ -4,7 +4,7 @@ class Cookie{
     static setCookie(name: string, value: string, days: number) {
         const expirationDate = new Date();
         expirationDate.setTime(expirationDate.getTime() + days * 24 * 60 * 60 * 1000);
-        const expires = "expires=" + expirationDate.toUTCString();
+        const expires = "expires=" + expirationadfafasdfdaDate.toUTCString();
         document.cookie = name + "=" + encodeURIComponent(value) + ";" + expires + ";path=/";
       }
 
